@@ -1,6 +1,7 @@
 *.zip
 venv/
 pruebas.ipynb
-dataset/
+DBScan_dev.ipynb
+original_data/
 .vscode/
 *.pdf
