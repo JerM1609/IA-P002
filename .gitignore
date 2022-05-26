@@ -1,0 +1,7 @@
+*.zip
+venv/
+pruebas.ipynb
+DBScan_dev.ipynb
+original_data/
+.vscode/
+*.pdf
