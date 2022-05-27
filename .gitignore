@@ -5,3 +5,6 @@ DBScan_dev.ipynb
 original_data/
 .vscode/
 *.pdf
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+*/__pycache__/
