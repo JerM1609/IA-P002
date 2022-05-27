@@ -4,7 +4,7 @@ from PIL import Image
 import os
 from natsort import natsorted
 
-def get_data(src_dir):
+def get_data(src_dir, width=100, height=100):
     """
     get_data
 
@@ -16,7 +16,7 @@ def get_data(src_dir):
     for train_img in natsorted(os.listdir(src_dir)):
         image_path = f"{src_dir}/{train_img}"
         img = Image.open(image_path)
-        newsize = (100, 100)
+        newsize = (width, height)
         img = img.resize(newsize)
         matrix = np.asarray(img)
         matrix = [list(matrix[i][j]) + [i, j] for i in range(len(matrix)) for j in range(len(matrix[i]))]
