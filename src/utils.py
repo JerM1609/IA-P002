@@ -27,6 +27,22 @@ def get_data(src_dir, width=100, height=100):
         data.append((train_img.replace(".jpg", "") ,matrix))
     return data
 
+def extract_tumor_to_image(dataframe, cluster_tumor):
+    i_max = dataframe['i'].max()+1
+    j_max = dataframe['j'].max()+1
+    array = np.zeros((i_max,j_max,3), dtype=np.uint8)
+    for index in range(len(dataframe)):
+        i = dataframe.iloc[index]['i']
+        j = dataframe.iloc[index]['j']
+        cluster = dataframe.iloc[index]['cluster']
+        color = dataframe.iloc[index]['R']
+        if cluster != cluster_tumor:
+            array[i,j] = [0, 0, 0]
+        else:
+            array[i,j] = [color, color, color]
+    
+    return array
+
 
 def get_vector_from_tumor(tumor_imagen, iterations):
     """
