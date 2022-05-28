@@ -42,7 +42,7 @@ def get_vector_from_tumor(tumor_imagen, iterations):
 
 
 
-def get_tumors(src_dir, iterations):
+def get_tumors_wavelet(src_dir, iterations):
     """
     get_data
 
