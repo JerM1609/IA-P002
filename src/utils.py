@@ -104,3 +104,35 @@ def get_similar_tumors(X, image_names, index_to_test, n_neighbors):
         ax[i].set_title(f"TUMOR SIMILAR #{i}")
 
     plt.show()
+
+
+
+def plot_results_segmentation(type, indices):
+    PATH_OBJETOS_CLUSTERIZADOS = f"Resultados/{type}/Objetos_Clusterizados/"
+    PATH_TUMORES_SEGMENTADOS   = f"Resultados/{type}/Matrices_Tumorales/"
+
+    lista_archivos = natsorted(os.listdir(PATH_OBJETOS_CLUSTERIZADOS))
+    df_0 = pd.read_csv(PATH_OBJETOS_CLUSTERIZADOS + lista_archivos[indices[0]], index_col= 0)
+    df_1 = pd.read_csv(PATH_OBJETOS_CLUSTERIZADOS + lista_archivos[indices[1]], index_col= 0)
+    df_2 = pd.read_csv(PATH_OBJETOS_CLUSTERIZADOS + lista_archivos[indices[2]], index_col= 0)
+    df_3 = pd.read_csv(PATH_OBJETOS_CLUSTERIZADOS + lista_archivos[indices[3]], index_col= 0)
+    fig, ax= plt.subplots(2, 4, figsize=(20,10))
+
+    for i in range(4):
+        ax[0,i].axis('off')
+        ax[1,i].axis('off')
+        ax[0,i].invert_yaxis()
+        ax[0,i].set_title(f'Resultado Clusterización')
+        ax[1,i].set_title(f'Tumor extraido')
+
+    ax[0,0].scatter(df_0['j'],df_0['i'],c=df_0['cluster'])
+    ax[0,1].scatter(df_1['j'],df_1['i'],c=df_1['cluster'])
+    ax[0,2].scatter(df_2['j'],df_2['i'],c=df_2['cluster'])
+    ax[0,3].scatter(df_3['j'],df_3['i'],c=df_3['cluster'])
+
+    for i in range(4):
+        im = plt.imread(PATH_TUMORES_SEGMENTADOS+ lista_archivos[indices[i]].replace('csv','png'))
+        ax[1,i].imshow(im,  extent=[0, 100, 0, 100])
+
+
+    plt.show()
