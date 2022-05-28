@@ -4,6 +4,8 @@ from PIL import Image
 import os
 import pywt
 from natsort import natsorted
+from sklearn.neighbors import NearestNeighbors
+import  matplotlib.pyplot as plt
 
 def get_data(src_dir, width=100, height=100):
     """
@@ -61,3 +63,28 @@ def get_tumors_wavelet(src_dir, iterations):
         x.append(fv)
         image_names.append(train_img.replace('png','jpg'))
     return np.asarray(x), np.asarray(image_names)
+
+
+def get_similar_tumors(X, image_names, index_to_test, n_neighbors):
+    n_neighbors += 1
+    neigh = NearestNeighbors(n_neighbors=n_neighbors,algorithm='kd_tree')
+    neigh.fit(X)
+    nombre_imagen_original = image_names[index_to_test]
+
+    similares = neigh.kneighbors([X[index_to_test]], return_distance=False)
+    similares = image_names[similares][0][1:]
+
+    fig, ax= plt.subplots(1,n_neighbors, figsize=(20,20))
+
+    im = plt.imread('data/'+nombre_imagen_original)
+    ax[0].imshow(im, extent=[0, 100, 0, 100])
+    ax[0].axis('off')
+    ax[0].set_title('TUMOR ORIGINAL')
+
+    for i in range(1,n_neighbors):
+        im = plt.imread('data/'+similares[i-1])
+        ax[i].imshow(im,  extent=[0, 100, 0, 100])
+        ax[i].axis('off')
+        ax[i].set_title(f"TUMOR SIMILAR #{i}")
+
+    plt.show()
