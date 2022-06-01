@@ -27,7 +27,18 @@ def get_data(src_dir, width=100, height=100):
         data.append((train_img.replace(".jpg", "") ,matrix))
     return data
 
+
+
+
 def extract_tumor_to_image(dataframe, cluster_tumor):
+    """
+    extract_tumor_to_image
+
+    :param dataframe: Dataframe de la imagen
+    :param cluster_tumor data: Id del cluster correspondiente al tumor
+
+    :return array: matriz de la imagen con el tumor extraido. Cluster no tumorales uniformizados
+    """
     i_max = dataframe['i'].max()+1
     j_max = dataframe['j'].max()+1
     array = np.zeros((i_max,j_max,3), dtype=np.uint8)
@@ -50,7 +61,6 @@ def get_vector_from_tumor(tumor_imagen, iterations):
 
     :param image: Imagen en formato vector.
     :param iterations: Entero que indica la cantidad de veces que se aplica el wavelet a la imagen.
-    :return LL: Vector característico sin la compresión a 1D.
     :return LL.flatten(): Vector característico en 1D.
     """
     LL, (LH, HL, HH) = pywt.dwt2(tumor_imagen, 'haar')
@@ -62,12 +72,12 @@ def get_vector_from_tumor(tumor_imagen, iterations):
 
 def get_tumors_wavelet(src_dir, iterations):
     """
-    get_data
+    get_tumors_wavelet
 
     :param src_dir: Directorio origen para leer las imágenes.
     :param iterations: Entero que indica la cantidad de veces que se aplica el wavelet a la imagen.
     :return np.asarray(x): Vector con los vectores característicos de las imágenes en 1D.
-    :return np.asarray(y): Vector con los labels correspondientes a los vectores característicos.
+    :return np.image_names(y): Vector con los nombres de las imagenes para ser ploteadas posteriormente
     """
     x = []
     image_names = []
@@ -82,6 +92,16 @@ def get_tumors_wavelet(src_dir, iterations):
 
 
 def get_similar_tumors(X, image_names, index_to_test, n_neighbors):
+    """
+    get_similar_tumors
+
+    :param X: Conjunto de transformaciones Wavelet
+    :param image_names: Nombres de las imagenes para luego poder plotear desde el path.
+    :param index_to_test:Conjunto de imágenes que serán testeadas con KNN
+    :param n_neighbors: Entero que indica la cantidad de veces que se aplica el wavelet a la imagen.
+
+    :do: Plotea los N tumores más similares para cada uno de los tumores indicados aplicando KNN sobre un KD-Tree.
+    """
     n_neighbors += 1
     neigh = NearestNeighbors(n_neighbors=n_neighbors,algorithm='kd_tree')
     neigh.fit(X)
@@ -108,6 +128,16 @@ def get_similar_tumors(X, image_names, index_to_test, n_neighbors):
 
 
 def plot_results_segmentation(type, indices):
+    """
+    plot_results_segmentation
+
+    :param type: Indica el tipo de algoritmo utilizado: K-Means, GMM o DBscan.
+    :param indices: Indices que seran ploteados a partir de su segmentacion
+
+
+    :do: Plotea la segmentacion de los indices recibidos como parametros
+    """
+
     PATH_OBJETOS_CLUSTERIZADOS = f"Resultados/{type}/Objetos_Clusterizados/"
     PATH_TUMORES_SEGMENTADOS   = f"Resultados/{type}/Matrices_Tumorales/"
 

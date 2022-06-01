@@ -4,6 +4,10 @@ from scipy.spatial import distance
 from operator import itemgetter
 import time
 
+########################################################################
+#FUNCIONES DE DISTANCIA
+########################################################################
+
 # https://www.geeksforgeeks.org/calculate-the-euclidean-distance-using-numpy/
 def euclidean(x1, x2):
     return distance.euclidean(x1, x2)
@@ -13,6 +17,10 @@ def chebychev(x1, x2):
 
 def manhattan(x1, x2):
     return distance.cityblock(x1, x2)
+
+########################################################################
+#TIPOS DE INICIALIZACION DE CENTROIDES
+########################################################################
 
 
 # https://neptune.ai/blog/k-means-clustering
@@ -35,6 +43,11 @@ def plus_plus(data, k, distance):
                 new_c = (x_i, d) if new_c[1] < d else new_c
         centroids.append(new_c[0])
     return np.matrix(centroids)
+
+
+########################################################################
+#CLASE K MEANS
+########################################################################
 
 
 class K_Means():
@@ -62,12 +75,7 @@ class K_Means():
 
     def label(self):
         """
-        for each row of DataFrame 
-            generate 3-tuple for each cluster
-                [(row_id, cluster_i, distance), ...]
-            get 2-tuple with the minimun distance
-                (row_id, cluster_i)
-        trasform list [(row_id, cluster_i), ...] to DataFrame and return it
+        DO: Etiqueta cada punto del dataframe 
         """
         idx = [
                 min([(idx, i, self.d(self.K[i], self.data.iloc[idx].to_numpy())) for i in range(len(self.K))], key=itemgetter(2))[:-1] 
@@ -76,6 +84,10 @@ class K_Means():
         return pd.DataFrame(idx, columns=['idx', 'cluster'])  
 
     def execute(self, d):
+        """
+        param d: Conjunto de datos en formato dataframe
+        return new_K: Conjunto de labels y ids de clusters
+        """
         self.data = d
         new_K = self.cc(self.data, self.n, self.d)
 
