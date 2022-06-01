@@ -23,6 +23,11 @@ class DBScan():
         return np.array(N, dtype=object)
 
     def execute(self, data):
+        """
+        
+        param: data
+        return: label. Lista de clusters para todos los puntos del dataset
+        """
         self.data = data       # database
         self.KDT = KDTree(data) 
         self.label = np.array([self.UNDEFINED for _ in range(len(data))])        
